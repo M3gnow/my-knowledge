@@ -1,12 +1,19 @@
 require('dotenv').config();
 const express = require('express');
 const { logger } = require('./services');
+const { pingRouter } = require('./routes');
+
+const app = express();
 
 (async () => {
     try {
-        const app = express();
+        app.use(express.json());
 
-        app.listen(7510, () => logger.info('Server listen at port 7510'));
+        app.use('/v1/ping', pingRouter);
+
+        app.listen(process.env.PORT, () =>
+            logger.info(`Server listen at port ${process.env.PORT}`)
+        );
     } catch (e) {
         logger.error(e);
     }
